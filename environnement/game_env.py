@@ -1,11 +1,13 @@
 
+
+
 class BasicGame:
     def __init__(self):
 
         # 0: empty, 1: X, -1: O
 
         self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        self.current_player = self.choose_yoursign (self.board)
+        self.choose_yoursign("X") 
         self.moves_count = 0
 
     #the player can choose in the start if he takes O or X
@@ -42,7 +44,7 @@ class BasicGame:
             return False
         return True
 
-    def get_validmoves(self):
+    def get_validMoves(self):
         # Find all zeros to get valid moves 
         return [(r, c) for r in range(3) for c in range(3) if self.board[r][c] == 0]
 
@@ -52,14 +54,10 @@ class BasicGame:
 
     def reset(self):
         self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        self.current_player = self.choose_yoursign (self.board)
+        self.choose_yoursign("X")
         self.moves_count = 0
         return self.get_state()
 
-    def is_over(self):
-        # Check if game ended using the rules
-        from env.game_rules import GameRules
-        return GameRules.is_over(self.board)
 
     def show(self):
         # Simple print board
