@@ -65,3 +65,5 @@ class BasicGame:
         print("\nBoard:")
         for row in self.board:
             print(" ".join([symbols[cell] for cell in row]))
+
+# adding fuctions for modes and for who start first

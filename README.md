@@ -94,8 +94,6 @@ After training, the agent is tested to measure:
 
 ---
 
-
-
 ## Authors
 
 Project developed as part of a Reinforcement Learning / Intelligent Systems study project.
