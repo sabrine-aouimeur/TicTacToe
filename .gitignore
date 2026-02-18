@@ -1,0 +1,4 @@
+__pycache__/    
+*.pyc
+
+q_table.json
