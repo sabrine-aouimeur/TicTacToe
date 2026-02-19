@@ -1,5 +1,4 @@
 import random
-from q_table import best_action
 
 def choose_action(q_table, state, valid_actions, epsilon):
     """

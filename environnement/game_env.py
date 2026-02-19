@@ -36,7 +36,7 @@ class BasicGame:
         return [(r, c) for r in range(3) for c in range(3) if self.board[r][c] == 0]
 
     def get_state(self):
-        return [row[:] for row in self.board]
+        return tuple(tuple(row) for row in self.board)
 
     def reset(self):
         self.board = [[0, 0, 0] for _ in range(3)]
@@ -62,3 +62,4 @@ class BasicGame:
             return True
 
         return False
+

@@ -20,9 +20,9 @@
     
     # agent.py
 import pickle
-from q_table import QTable
-from policy import choose_action
-from learning import update
+from agent.implementation.q_table import QTable
+from agent.implementation.policy import choose_action
+from agent.implementation.learning import update
 
 
 class Agent:
@@ -46,11 +46,11 @@ class Agent:
         return choose_action(self.q_table, state, valid_moves, self.epsilon)
 
     # Mettre à jour Q-table après move
-    def learn(self, state, action, reward, next_state, valid_moves):
-        update(self.q_table, state, action, reward, next_state, valid_moves, self.alpha, self.gamma)
+    def learn(self, state, action, reward, next_state, valid_moves, done):
+        update(self.q_table, state, action, reward, next_state, valid_moves, done, self.alpha, self.gamma)
 
     # Réduction de epsilon
-    def decay_epsilon(self, decay_rate=0.995, min_epsilon=0.01):
+    def decay_epsilon(self, decay_rate=0.999, min_epsilon=0.01):
         self.epsilon = max(min_epsilon, self.epsilon * decay_rate)
 
     # Sauvegarder Q-table
