@@ -15,13 +15,11 @@ from environnement.game_env import BasicGame
 from agent.implementation.agent import Agent
 from environnement.game_rules import GameRules
 from agent.implementation.stats import Stats
+from agent.implementation.utils import export_q_table_to_csv
 
 def train(episodes=50000):
     """
     Trains the agent using Self-Play.
-
-    Args:
-        episodes (int): Number of games to play.
     """
     agent = Agent()
     game = BasicGame()
@@ -108,6 +106,9 @@ def train(episodes=50000):
     
     # Save Stats to CSV
     save_stats(stats)
+    
+    # Export Q-Table to CSV
+    export_q_table_to_csv(agent.q_table, "q_table.csv")
 
 
 def save_stats(stats):

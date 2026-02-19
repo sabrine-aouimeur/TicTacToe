@@ -1,30 +1,13 @@
-"""
-Q-Learning update rule implementation.
-"""
-
-from typing import Tuple, List
 from agent.implementation.q_table import QTable
 
 
-def update(q_table: QTable, state: Tuple, action: Tuple[int, int], reward: float, 
-           next_state: Tuple, valid_actions: List[Tuple[int, int]], done: bool, 
-           alpha: float, gamma: float) -> None:
+def update(q_table, state, action, reward, next_state, valid_actions, done, alpha, gamma):
     """
     Updates the Q-value for a given state-action pair using the Bellman equation.
 
     Formula:
         Q(s, a) = Q(s, a) + alpha * (reward + gamma * max(Q(s', a')) - Q(s, a))
 
-    Args:
-        q_table (QTable): The agent's Q-table.
-        state (Tuple): The previous state.
-        action (Tuple[int, int]): The action taken.
-        reward (float): The reward received.
-        next_state (Tuple): The resulting state.
-        valid_actions (List[Tuple[int, int]]): Valid actions in the next state.
-        done (bool): Whether the episode has ended.
-        alpha (float): Learning rate.
-        gamma (float): Discount factor.
     """
     # Current Q-value
     current_q = q_table.get(state, action)
