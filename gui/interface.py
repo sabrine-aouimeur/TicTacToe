@@ -16,11 +16,11 @@ class TicTacToeApp:
         self.root = root
         self.root.title("Tic Tac Toe")
         self.root.geometry("900x600")
-        self.root.configure(bg="#1c3e52")
+        self.root.configure(bg="#150025")
        
 
         
-        self.canvas = tk.Canvas(self.root, bg="#1c3e52", highlightthickness=0)
+        self.canvas = tk.Canvas(self.root, bg="#150025", highlightthickness=0)
         self.canvas.pack(fill="both", expand=True)
         self.player_symbol = None
         self.who_starts = None
@@ -30,14 +30,14 @@ class TicTacToeApp:
 
       
         self.COLORS = {
-            "bg": "#1c3e52",
-            "box": "#2c5f78",
-            "selected_box": "#3d7a99", # Lighter color when selected
-            "lime": "#c2d94c",
-            "orange": "#f28b30",
+            "bg": "#150025",
+            "box": "#2D0048",
+            "selected_box": "#590099", # Lighter/Neon color when selected
+            "lime": "#FF007F",         # Neon Pink
+            "orange": "#00F0FF",       # Neon Cyan
             "gray": "#5a5a5a",         # Color for disabled state
-            "blue_faint": "#2a5d7b", 
-            "grid": "#4a7a8c"
+            "blue_faint": "#2D0048",   # Subtle purple for BG text
+            "grid": "#590099"          # Electric Purple
         }
         
         self.current_screen = "menu"
@@ -83,7 +83,7 @@ class TicTacToeApp:
 
     def draw_menu(self, w, h):
 
-        faint_font = ("Segoe UI", int(h * 0.07), "bold")
+        faint_font = ("Arial Rounded MT Bold", int(h * 0.07), "bold")
         self.canvas.create_text(w * 0.45, h * 0.3, text="XO XO", fill=self.COLORS["blue_faint"], font=faint_font, anchor="center", angle=15)
         self.canvas.create_text(w * 0.65, h * 0.45, text="XO XO", fill=self.COLORS["blue_faint"], font=faint_font, anchor="center", angle=15)
 
@@ -127,7 +127,7 @@ class TicTacToeApp:
         
         rect = self.draw_round_rect(x1, y1, x2, y2, r=12, fill=self.COLORS["box"])
         text_size = int(h * 0.09)
-        text = self.canvas.create_text(w/2, h/2, text="Tic Tac Toe", fill="white", font=("Segoe UI", text_size, "bold"))
+        text = self.canvas.create_text(w/2, h/2, text="Tic Tac Toe", fill="white", font=("Arial Rounded MT Bold", text_size, "bold"))
         
         self.canvas.tag_bind(rect, "<Button-1>", lambda e: self.switch_to_game())
         self.canvas.tag_bind(text, "<Button-1>", lambda e: self.switch_to_game())
@@ -138,7 +138,7 @@ class TicTacToeApp:
             w/2, h*0.3,
             text="Choose your symbol",
             fill="white",
-            font=("Segoe UI", int(h*0.06), "bold")
+            font=("Arial Rounded MT Bold", int(h*0.06), "bold")
         )
 
         btn_w = w * 0.12
@@ -176,7 +176,7 @@ class TicTacToeApp:
         play_text_color = "white" if is_active else "#aaaaaa"
 
         play_rect = self.draw_round_rect(pb_x1, pb_y1, pb_x2, pb_y2, r=12, fill=play_color)
-        play_text = self.canvas.create_text(w/2, (pb_y1 + pb_y2)/2, text="PLAY", fill=play_text_color, font=("Segoe UI", int(play_btn_h * 0.5), "bold"))
+        play_text = self.canvas.create_text(w/2, (pb_y1 + pb_y2)/2, text="PLAY", fill=play_text_color, font=("Arial Rounded MT Bold", int(play_btn_h * 0.5), "bold"))
         
         if is_active:
             self.canvas.tag_bind(play_rect, "<Button-1>", lambda e: self.start_game())
@@ -258,7 +258,7 @@ class TicTacToeApp:
             w * 0.1, h * 0.08,
             text=f"Time: {time_str}",
             fill="white",
-            font=("Segoe UI", int(h * 0.04), "bold"),
+            font=("Arial Rounded MT Bold", int(h * 0.04), "bold"),
             anchor="w"
         )
 
@@ -270,7 +270,7 @@ class TicTacToeApp:
             px1 = w * 0.88 - p_w
             py1 = h * 0.05
             p_rect = self.draw_round_rect(px1, py1, px1 + p_w, py1 + p_h, r=10, fill=btn_color)
-            p_lbl = self.canvas.create_text(px1 + p_w/2, py1 + p_h/2, text=pause_text, fill="white", font=("Segoe UI", int(p_h*0.5), "bold"))
+            p_lbl = self.canvas.create_text(px1 + p_w/2, py1 + p_h/2, text=pause_text, fill="white", font=("Arial Rounded MT Bold", int(p_h*0.5), "bold"))
             
             self.canvas.tag_bind(p_rect, "<Button-1>", lambda e: self.toggle_pause())
             self.canvas.tag_bind(p_lbl, "<Button-1>", lambda e: self.toggle_pause())
@@ -401,20 +401,20 @@ class TicTacToeApp:
     def draw_game_over(self, w, h):
         # Result Text
         if self.winner == "Draw":
-            result_text = "It's a Draw!"
+            result_text = "No one Won"
             result_color = "white"
         elif self.winner == "Human":
-            result_text = "You Won!"
+            result_text = "You Won"
             result_color = self.COLORS["lime"]
         else:
-            result_text = "AI Won!"
+            result_text = "AI Won"
             result_color = self.COLORS["orange"]
 
         self.canvas.create_text(
             w/2, h*0.35,
             text=result_text,
             fill=result_color,
-            font=("Segoe UI", int(h*0.12), "bold")
+            font=("Arial Rounded MT Bold", int(h*0.12), "bold")
         )
 
         # Buttons
@@ -424,13 +424,13 @@ class TicTacToeApp:
         pa_x1 = (w - btn_w) / 2
         pa_y1 = h * 0.55
         pa_rect = self.draw_round_rect(pa_x1, pa_y1, pa_x1 + btn_w, pa_y1 + btn_h, r=15, fill=self.COLORS["box"])
-        pa_text = self.canvas.create_text(w/2, pa_y1 + btn_h/2, text="PLAY AGAIN", fill="white", font=("Segoe UI", int(btn_h*0.4), "bold"))
+        pa_text = self.canvas.create_text(w/2, pa_y1 + btn_h/2, text="PLAY AGAIN", fill="white", font=("Arial Rounded MT Bold", int(btn_h*0.4), "bold"))
         
         # Back to Menu Button
         mm_x1 = (w - btn_w) / 2
         mm_y1 = h * 0.7
         mm_rect = self.draw_round_rect(mm_x1, mm_y1, mm_x1 + btn_w, mm_y1 + btn_h, r=15, fill=self.COLORS["grid"])
-        mm_text = self.canvas.create_text(w/2, mm_y1 + btn_h/2, text="MENU", fill="white", font=("Segoe UI", int(btn_h*0.4), "bold"))
+        mm_text = self.canvas.create_text(w/2, mm_y1 + btn_h/2, text="MENU", fill="white", font=("Arial Rounded MT Bold", int(btn_h*0.4), "bold"))
 
         self.canvas.tag_bind(pa_rect, "<Button-1>", lambda e: self.start_game())
         self.canvas.tag_bind(pa_text, "<Button-1>", lambda e: self.start_game())
