@@ -9,4 +9,4 @@ def export_q_table_to_csv(q_table_obj, filename):
         for (state, action), value in q_table_obj._q_table.items():
             writer.writerow([state, action, value])
 
-    print(f"Q-Table exported to {filename}")
+    print(f"q-table exported to {filename}")

@@ -1,7 +1,3 @@
-"""
-Implements the Q-Table data structure for storing state-action values.
-"""
-
 import random
 
 
@@ -13,21 +9,22 @@ class QTable:
 
     def get(self, state, action):
         """
-        Retrieves the Q-value for a specific state-action pair.
+        Retrieves the Q-value for a specific state-action pair
 
         """
         return self._q_table.get((state, action), 0.0)
 
     def set(self, state, action, value):
         """
-        Updates the Q-value for a specific state-action pair.
+        Updates the Q-value for a specific state-action pair
 
         """
         self._q_table[(state, action)] = value
 
     def max_q(self, state, valid_actions):
         """
-        Finds the maximum Q-value achievable from the current state given a list of valid actions.
+        Finds the maximum Q-value achievable from the current state given a list of valid actions
+
         """
         if not valid_actions:
             return 0.0
@@ -36,20 +33,20 @@ class QTable:
 
     def best_action(self, state, valid_actions):
         """
-        Determines the best action to take in the current state (Greedy policy).
-        If multiple actions have the same highest Q-value, one is chosen randomly.
+        Determines the best action to take in the current state (Greedy policy)
+        If multiple actions have the same highest q-value one is chosen randomly
 
         """
         if not valid_actions:
             return None
         
-        # Get Q-values for all valid actions
+        # Get q-values for all valid actions
         q_values = [self.get(state, a) for a in valid_actions]
         
         # Find the maximum value
         max_q_val = max(q_values)
         
-        # Collect all actions that share this maximum value (to handle ties)
+        # Collect all actions that share this maximum value 
         best_actions = [a for a, q in zip(valid_actions, q_values) if q == max_q_val]
         
         # Return a random choice among the best options

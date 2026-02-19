@@ -1,14 +1,10 @@
 
-"""
-Main training loop for the Reinforcement Learning agent.
-"""
-
 import os
 import sys
 import random
 import csv
 
-# Add root path
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from environnement.game_env import BasicGame
@@ -38,9 +34,9 @@ def train(episodes=50000):
     for episode in range(episodes):
         state = game.reset()
         done = False
-        
-        # History to update Q-table at the end of the game
-        # Each entry: (state, action, valid_moves_at_that_state)
+    
+        # History to update q-table at the end of the game
+        # Each entry: (state, action, valid_moves_at that state)
         history = {1: [], -1: []}
         
         while not done:
@@ -57,7 +53,7 @@ def train(episodes=50000):
             next_state, _, done = game.step(action)
             state = next_state
 
-        # Game over - Give rewards
+        #  determine winner and assign rewards when the game ends
         winner = GameRules.check_winner(game.board)
         
         if winner == 1:
@@ -90,7 +86,7 @@ def train(episodes=50000):
             # We iterate backwards through the history to update previous states
             for i in range(len(history[player]) - 2, -1, -1):
                 s, a, _ = history[player][i]
-                next_s, _, next_v = history[player][i+1] # next_v are valid moves at next_s
+                next_s, _, next_v = history[player][i+1]
                 
                 # Update Q(s,a) using Q(next_s, next_a)
                 agent.learn(s, a, 0.0, next_s, next_v, False)

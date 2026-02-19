@@ -6,8 +6,8 @@ def choose_action(q_table, state, valid_actions, epsilon):
     """
     Selects an action using the Epsilon-Greedy strategy.
 
-    - Exploration (probability epsilon): Choose a random valid action.
-    - Exploitation (probability 1 - epsilon): Choose the greedy (best) action from the Q-Table.
+    - Exploration (probability epsilon) -> Choose a random valid action
+    - Exploitation (probability 1 - epsilon) -> Choose the greedy (best) action from the q-table
 
     """
     if not valid_actions:

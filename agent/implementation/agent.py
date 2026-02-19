@@ -1,8 +1,3 @@
-"""
-Main agent class for the Reinforcement Learning Tic-Tac-Toe agent.
-Handles the Q-Learning process, model management, and action selection.
-"""
-
 import pickle
 from agent.implementation.q_table import QTable
 from agent.implementation.policy import choose_action
