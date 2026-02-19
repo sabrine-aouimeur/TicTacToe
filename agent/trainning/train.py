@@ -21,6 +21,10 @@ def train(episodes=50000):
     game = BasicGame()
     stats = Stats()
 
+    # Ensure results directory exists
+    if not os.path.exists("results"):
+        os.makedirs("results")
+
     model_path = "q_table.pkl"
     if os.path.exists(model_path):
         try:
@@ -104,14 +108,14 @@ def train(episodes=50000):
     save_stats(stats)
     
     # Export Q-Table to CSV
-    export_q_table_to_csv(agent.q_table, "q_table.csv")
+    export_q_table_to_csv(agent.q_table, "results/q_table.csv")
 
 
 def save_stats(stats):
     """
     Saves training statistics to a CSV file.
     """
-    filename = "training_stats.csv"
+    filename = "results/training_stats.csv"
     file_exists = os.path.isfile(filename)
     
     with open(filename, mode='a', newline='') as file:
