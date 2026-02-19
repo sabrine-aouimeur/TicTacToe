@@ -1,33 +1,49 @@
-'''
-Showing learning progress (important for grading)
+"""
+Tracks learning progress and statistics for the agent.
+Useful for debugging and visualizing improvement over time.
+"""
 
-Debugging (is agent improving or stuck?)
+class Stats:
+    """
+    Tracks win/loss/draw records and average rewards.
+    """
+    
+    def __init__(self):
+        self.wins = 0
+        self.losses = 0
+        self.draws = 0
+        self.total_games = 0
+        self.total_reward = 0.0
 
-Comparing:
+    def record_win(self):
+        """Records a win."""
+        self.wins += 1
+        self.total_games += 1
 
-    AI vs AI
+    def record_loss(self):
+        """Records a loss."""
+        self.losses += 1
+        self.total_games += 1
 
-    AI vs Human
+    def record_draw(self):
+        """Records a draw."""
+        self.draws += 1
+        self.total_games += 1
 
-Useful statistics:
+    def add_reward(self, reward):
+        """Adds to the cumulative reward."""
+        self.total_reward += reward
 
-Win rate
+    def get_win_rate(self):
+        """Returns the current win rate (0.0 to 1.0)."""
+        if self.total_games == 0:
+            return 0.0
+        return self.wins / self.total_games
 
-Loss rate
-
-Draw rate
-
-Average reward
-
-Epsilon over time
-
-'''
-
-# functions:
-# __init__
-# win()
-# loss()
-# draw()
-# add_reward()
-# win_rate()
-# reset()
+    def reset(self):
+        """Resets all statistics."""
+        self.wins = 0
+        self.losses = 0
+        self.draws = 0
+        self.total_games = 0
+        self.total_reward = 0.0
