@@ -1,19 +1,21 @@
 import sys
 import os
 
-# Ensure the root directory and agent implementation directory are in sys.path
+# Ensure the root directory is in sys.path
 root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-agent_impl_dir = os.path.join(root_dir, "agent", "implementation")
-sys.path.insert(0, agent_impl_dir)
-sys.path.append(root_dir)
+if root_dir not in sys.path:
+    sys.path.append(root_dir)
 
-# Fix for the bug in policy.py which tries to import a non-existent function from q_table
-import q_table
-q_table.best_action = None 
-
-from agent import Agent
+from agent.implementation.agent import Agent
 from environnement.game_env import BasicGame
 from environnement.game_rules import GameRules
+
+
+def display_board(board):
+    symbols = {0: ".", 1: "X", -1: "O"}
+    print("\n  0 1 2")
+    for i, row in enumerate(board):
+        print(f"{i} " + " ".join(symbols[cell] for cell in row))
 
 
 def board_to_state(board):
@@ -31,7 +33,7 @@ def test():
         print("No previous model found. Starting fresh.")
 
     print("=== GAME START ===")
-    game.show()
+    display_board(game.board)
 
     # In BasicGame, current_player starts at 1 (X)
     # Player 1: Human (X)
@@ -80,9 +82,10 @@ def test():
             reward = GameRules.evaluate(game.board, -1)
             next_state = board_to_state(game.board)
             next_valid_moves = game.get_validMoves()
-            ai.learn(last_ai_state, last_ai_action, reward, next_state, next_valid_moves)
+            done = GameRules.is_over(game.board)
+            ai.learn(last_ai_state, last_ai_action, reward, next_state, next_valid_moves, done)
 
-        game.show()
+        display_board(game.board)
 
     # Final result
     winner = GameRules.check_winner(game.board)
@@ -97,7 +100,7 @@ def test():
     # Final learning step with terminal reward
     final_reward = GameRules.evaluate(game.board, -1)
     if last_ai_state is not None:
-        ai.learn(last_ai_state, last_ai_action, final_reward, board_to_state(game.board), [])
+        ai.learn(last_ai_state, last_ai_action, final_reward, board_to_state(game.board), [], True)
 
     ai.decay_epsilon()
     ai.save_model()
