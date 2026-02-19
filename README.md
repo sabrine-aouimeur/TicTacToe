@@ -58,29 +58,26 @@ The AI agent learns how to play the game by interacting with the environment, re
 # structure : 
 
 agent/
-│   ├── __init__.py
 │
 ├── implementation/
-│   ├── __init__.py
 │   ├── agent.py
 │   ├── learning.py
 │   ├── policy.py
 │   ├── q_table.py
 │   ├── stats.py
+│   
 │
 ├── training/
-│   ├── __init__.py
 │   ├── train.py
-
+│
 environment/
-│   ├── __init__.py
 │   ├── game_env.py
 │   ├── game_rules.py
 │   ├── test_game.py
-
+│
 gui/
-│   ├── __init__.py
 │   ├── interface.py
+
 
 
 #  How to Run the Project ?
