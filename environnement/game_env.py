@@ -1,69 +1,64 @@
-
-
-
 class BasicGame:
     def __init__(self):
-
-        # 0: empty, 1: X, -1: O
-
-        self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        self.choose_yoursign("X") 
+        self.board = [[0, 0, 0] for _ in range(3)]
+        self.current_player = 1
         self.moves_count = 0
-
-    #the player can choose in the start if he takes O or X
-    def choose_yoursign(self, sign):
-        if sign == "X":
-            self.current_player = 1
-        elif sign == "O":
-            self.current_player = -1
-        else:
-            print("Invalid sign ")
-            self.current_player = 1 # Default is X
 
     def step(self, action):
         r, c = action
-     
+
         if not self.is_valid(r, c):
-            print(f"Invalid move ({r},{c}) Try again")
-            return self.get_state(), self.current_player
-            
+            return self.get_state(), -1, True  # punition si move invalide
+
         self.board[r][c] = self.current_player
         self.moves_count += 1
-        
-        moved_player = self.current_player 
-        self.switch_player() # Next turn
-        
-        return self.get_state(), moved_player
+
+        # Check win
+        if self.check_win(self.current_player):
+            return self.get_state(), 1, True
+
+        # Check draw
+        if self.moves_count == 9:
+            return self.get_state(), 0, True
+
+        # Switch player
+        self.switch_player()
+
+        return self.get_state(), 0, False
 
     def switch_player(self):
         self.current_player *= -1
 
     def is_valid(self, r, c):
-        #  cell is empty
-        if self.board[r][c] != 0:
-            return False
-        return True
+        return self.board[r][c] == 0
 
     def get_validMoves(self):
-        # Find all zeros to get valid moves 
         return [(r, c) for r in range(3) for c in range(3) if self.board[r][c] == 0]
 
-    def get_state(self):  
-        # Return a copy
+    def get_state(self):
         return [row[:] for row in self.board]
 
     def reset(self):
-        self.board = [[0, 0, 0], [0, 0, 0], [0, 0, 0]]
-        self.choose_yoursign("X")
+        self.board = [[0, 0, 0] for _ in range(3)]
+        self.current_player = 1
         self.moves_count = 0
         return self.get_state()
 
-
-    def show(self):
-        # Simple print board
-        symbols = {0: '.', 1: 'X', -1: 'O'}
-        print("\nBoard:")
+    def check_win(self, player):
+        # rows
         for row in self.board:
-            print(" ".join([symbols[cell] for cell in row]))
+            if all(cell == player for cell in row):
+                return True
 
-# adding fuctions for modes and for who start first
+        # columns
+        for col in range(3):
+            if all(self.board[row][col] == player for row in range(3)):
+                return True
+
+        # diagonals
+        if all(self.board[i][i] == player for i in range(3)):
+            return True
+        if all(self.board[i][2-i] == player for i in range(3)):
+            return True
+
+        return False
