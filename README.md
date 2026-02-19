@@ -1,99 +1,85 @@
-# Reinforcement Learning Game Project
+ # Description  
 
-## Overview
+ This project implements the classic TicTacToe game integrated with an Artificial Intelligence agent trained using the Q-learning algorithm (Reinforcement Learning).
 
-This project focuses on designing a complete game environment and training intelligent agents using **Reinforcement Learning**, specifically the **Q-Learning algorithm**.
-The objective is to build an autonomous agent capable of learning optimal decisions through interaction with the environment over multiple training episodes.
+The AI agent learns how to play the game by interacting with the environment, receiving rewards, and updating its Q-table over multiple training episodes. After sufficient training, the agent is capable of playing optimally against a human player.
 
-The project covers environment design, agent implementation, training, and evaluation.
+# Project Objectives 
 
----
+- Implement the logic of the TicTacToe game
+- Design a Reinforcement Learning agent using Q-learning
+- Train the agent to learn optimal strategies
+- Connect the trained agent to a Graphical User Interface
+- Allow a human player to play against the AI
 
-## Objectives
+# How the System Works ? 
 
-* Design a fully functional **game environment**
-* Implement the **Reinforcement Learning framework**
-* Develop multiple agents with different strategies
-* Train an agent using **Q-Learning**
-* Evaluate learning performance and behavior
+ # 1 Game Environment :
+   It represents the environment in which the agent interacts : 
+    - Initializing the 3x3 board
+    - Managing player moves
+    - Validating available actions
+    - Resetting the game state
 
----
+ # 2 Game Rules  :
 
-## Project Components
+  - Checks winning conditions
+  - Detects draw situations
+  - Determines when the game is finished
 
-### 1. Environment
 
-The environment represents the game and defines:
+ # 3 Reinforcement Learning agent
+   The agent uses the Q-learning algorithm 
 
-* State representation
-* Action space
-* Reward system
-* Terminal conditions (win / lose / draw)
-* `step(action)` function to execute a move and return:
+   - Uses a Q-table to store state action values
+   - Chooses actions using an epsilon
+   - Updates Q-values using the formula : 
 
-  * next_state
-  * reward
-  * done flag
+    Q(s, a) = Q(s, a) + alpha * [ reward + gamma * max Q(s', a') - Q(s, a) ]
 
----
 
-### 2. Agents
+# Training : 
+  1. The game is reset
+  2. The agent selects actions
+  3. The environment returns rewards
+  4. The Q-table is updated
+  5. The process repeats for many episodes
 
-Different agents are implemented for comparison:
 
-* **Random Agent**
-  Chooses actions randomly (baseline performance).
+# Interface : 
+   ![alt text](image-1.png)  
 
-* **Q-Learning Agent**
-  Learns optimal behavior using a Q-table and improves over time through experience.
+   ![alt text](image-2.png) 
 
----
+   ![alt text](image-3.png) 
 
-### 3. Reinforcement Learning (Q-Learning)
+   ![alt text](image-4.png) 
 
-The learning process follows:
+# structure : 
 
-```
-Q(s, a) ← Q(s, a) + α [ r + γ max Q(s', a') − Q(s, a) ]
-```
+agent/
+│
+├── implementation/
+│   ├── agent.py
+│   ├── learning.py
+│   ├── policy.py
+│   ├── q_table.py
+│   ├── stats.py
+│   
+│
+├── training/
+│   ├── train.py
+│
+environment/
+│   ├── game_env.py
+│   ├── game_rules.py
+│   ├── test_game.py
+│
+gui/
+│   ├── interface.py
 
-Where:
 
-* `s` = current state
-* `a` = action taken
-* `r` = reward received
-* `s'` = next state
-* `α` = learning rate
-* `γ` = discount factor
 
-The agent balances:
+#  How to Run the Project ?
 
-* **Exploration** → trying new actions
-* **Exploitation** → using learned best actions
-
----
-
-### 4. Training
-
-The agent is trained over many episodes:
-
-* Reset environment
-* Interact step-by-step
-* Update Q-values
-* Gradually reduce exploration (epsilon decay)
-
----
-
-### 5. Evaluation
-
-After training, the agent is tested to measure:
-
-* Win rate / success rate
-* Learning improvement
-* Stability of decisions
-
----
-
-## Authors
-
-Project developed as part of a Reinforcement Learning / Intelligent Systems study project.
+python gui/interface.py
