@@ -60,6 +60,11 @@ class TicTacToeApp:
           print(f"Model loaded: {model_path}")
         except:
           print(f"No saved model found at {model_path}")
+        
+        # Track game history for learning: list of (state, action) tuples
+        self.game_history = []
+        self.last_ai_state = None
+        self.last_ai_action = None
 
     def on_resize(self, event):
         self.draw()
@@ -283,6 +288,9 @@ class TicTacToeApp:
         self.board = [None] * 9
         self.winner = None
         self.winning_line = None
+        self.game_history = []
+        self.last_ai_state = None
+        self.last_ai_action = None
         
         # Reset Timer and Pause
         self.elapsed_time = 0
@@ -351,7 +359,8 @@ class TicTacToeApp:
         self.draw()
 
         if self.winner:
-            self.handle_game_end()
+            self.handle_game_end_learning()
+            self.handle_game_end_ui()
 
     def get_winning_line_indices(self):
         wins = [
@@ -372,6 +381,18 @@ class TicTacToeApp:
             self.game_env.step((r, c))
             self.sync_board()
             
+            # Record Human move (part of state transition for AI)
+            if self.last_ai_state is not None and self.last_ai_action is not None:
+                # The AI made a move, and now the Human moved. 
+                # The state *after* Human move is the new state for the AI's previous action.
+                # However, we usually update when the AI gets a reward (end of game or next turn).
+                # simpler approach: Store history and bulk learn at end? 
+                # Or step-by-step? Let's do step-by-step for immediate feedback if possible,
+                # but standard Q-learning updates (S, A, R, S').
+                
+                # We will handle learning in ai_move (for previous turn) and handle_game_end.
+                pass
+            
             if not self.winner:
                 # Trigger AI move
                 self.root.after(500, self.ai_move)
@@ -383,14 +404,50 @@ class TicTacToeApp:
         state = self.game_env.get_state()
         valid_moves = self.game_env.get_validMoves()
         
+        # If this isn't the first move, learn from the *previous* move result
+        # (The previous move led to the state BEFORE this turn, but effectively we simply wait for the game end
+        # or we can update here if we treat the "opponent move" as part of the environment dynamics).
+        # A simpler robust way for "Human vs AI":
+        # AI acts S -> A.
+        # Environment (Human) responds.
+        # As soon as it's AI's turn again, we have (S_old, A_old, Reward=0, S_new).
+        # If game ended, we handle that in handle_game_end.
+        
+        if self.last_ai_state is not None:
+            # Reward is 0 because game didn't end yet.
+            self.ai_agent.learn(self.last_ai_state, self.last_ai_action, 0.0, state, valid_moves, False)
+
         # Act
         action = self.ai_agent.act(state, valid_moves)
+        
+        # Save state/action for next learning step
+        self.last_ai_state = state
+        self.last_ai_action = action
         
         # Step
         self.game_env.step(action)
         self.sync_board()
 
-    def handle_game_end(self):
+    def handle_game_end_learning(self):
+        # Determine reward for AI
+        reward = 0
+        if self.winner == "AI":
+            reward = 1.0
+        elif self.winner == "Human":
+            reward = -1.0
+        elif self.winner == "Draw":
+            reward = 0.5  # Encourage draws vs losing
+
+        # Learn from the final move
+        if self.last_ai_state is not None and self.last_ai_action is not None:
+            final_state = self.game_env.get_state()
+            self.ai_agent.learn(self.last_ai_state, self.last_ai_action, reward, final_state, [], True)
+        
+        # Save the updated brain!
+        self.ai_agent.save_model("q_table.pkl")
+        print("Updated Q-Table saved.")
+
+    def handle_game_end_ui(self):
         # Transistion to game over screen after a delay
         self.root.after(1500, self.switch_to_game_over)
 
